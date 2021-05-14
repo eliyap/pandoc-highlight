@@ -1,17 +1,17 @@
 var phrasing = require('mdast-util-to-markdown/lib/util/container-phrasing')
 
 exports.unsafe = [{character: '=', inConstruct: 'phrasing'}]
-exports.handlers = {delete: handleDelete}
+exports.handlers = {highlight: handleHighlight}
 
-handleDelete.peek = peekDelete
+handleHighlight.peek = peektHighlight
 
-function handleDelete(node, _, context) {
+function handleHighlight(node, _, context) {
   var exit = context.enter('emphasis')
   var value = phrasing(node, context, {before: '=', after: '='})
   exit()
   return '==' + value + '=='
 }
 
-function peekDelete() {
+function peektHighlight() {
   return '='
 }
