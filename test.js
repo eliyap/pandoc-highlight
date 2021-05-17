@@ -3,14 +3,14 @@ var fromMarkdown = require('mdast-util-from-markdown')
 var toMarkdown = require('mdast-util-to-markdown')
 var removePosition = require('unist-util-remove-position')
 var syntax = require('micromark-extension-gfm-strikethrough')()
-var strikethrough = require('.')
+var highlight = require('.')
 
 test('markdown -> mdast', function (t) {
   t.deepEqual(
     removePosition(
       fromMarkdown('a ~~b~~ c.', {
         extensions: [syntax],
-        mdastExtensions: [strikethrough.fromMarkdown]
+        mdastExtensions: [highlight.fromMarkdown]
       }),
       true
     ),
@@ -21,7 +21,7 @@ test('markdown -> mdast', function (t) {
           type: 'paragraph',
           children: [
             {type: 'text', value: 'a '},
-            {type: 'delete', children: [{type: 'text', value: 'b'}]},
+            {type: 'mark', children: [{type: 'text', value: 'b'}]},
             {type: 'text', value: ' c.'}
           ]
         }
@@ -34,7 +34,7 @@ test('markdown -> mdast', function (t) {
     removePosition(
       fromMarkdown('a ~~b\nc~~ d.', {
         extensions: [syntax],
-        mdastExtensions: [strikethrough.fromMarkdown]
+        mdastExtensions: [highlight.fromMarkdown]
       }),
       true
     ),
@@ -45,7 +45,7 @@ test('markdown -> mdast', function (t) {
           type: 'paragraph',
           children: [
             {type: 'text', value: 'a '},
-            {type: 'delete', children: [{type: 'text', value: 'b\nc'}]},
+            {type: 'mark', children: [{type: 'text', value: 'b\nc'}]},
             {type: 'text', value: ' d.'}
           ]
         }
@@ -64,11 +64,11 @@ test('mdast -> markdown', function (t) {
         type: 'paragraph',
         children: [
           {type: 'text', value: 'a '},
-          {type: 'delete', children: [{type: 'text', value: 'b'}]},
+          {type: 'mark', children: [{type: 'text', value: 'b'}]},
           {type: 'text', value: ' c.'}
         ]
       },
-      {extensions: [strikethrough.toMarkdown]}
+      {extensions: [highlight.toMarkdown]}
     ),
     'a ~~b~~ c.\n',
     'should serialize strikethrough'
@@ -80,11 +80,11 @@ test('mdast -> markdown', function (t) {
         type: 'paragraph',
         children: [
           {type: 'text', value: 'a '},
-          {type: 'delete', children: [{type: 'text', value: 'b\nc'}]},
+          {type: 'mark', children: [{type: 'text', value: 'b\nc'}]},
           {type: 'text', value: ' d.'}
         ]
       },
-      {extensions: [strikethrough.toMarkdown]}
+      {extensions: [highlight.toMarkdown]}
     ),
     'a ~~b\nc~~ d.\n',
     'should serialize strikethrough w/ eols'
